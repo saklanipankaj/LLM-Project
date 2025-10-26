@@ -1,4 +1,4 @@
-# LLM Project - AI Engineering Take Home Test
+# LLM Project
 
 ## API Key Configuration
 
@@ -27,9 +27,7 @@ Install all required dependencies:
 pip install -r requirements.txt
 ```
 
-## Assignment Implementation
-
-### Part 1: Document Loading
+## Part 1: Document Extraction & Prompt Engineering with LangChain
 
 **Objective:** Load the PDF document into the LLM context window without RAG.
 
@@ -42,12 +40,28 @@ pip install -r requirements.txt
 **Eplanation:**
 For this task based on the document [text](fy2024_analysis_of_revenue_and_expenditure.pdf), the document has lots of tables and some complex layouts. Which `PyMuPDFLoader` is good at, just to test out another loader I have tried `PDFPlumberLoader` and it worked well, however it was not as fast as `PyMuPDFLoader`.
 
-### Part 2: Multi-Agent Supervisor System
+## Part 2: Tool Calling & Reasoning Integration
+**Objective:** Extend Part 1 to include LLM reasoning capabilities and external tool usage.
 
-**Objective:** Implement a multi-agent system using LangGraph with a supervisor pattern to answer: "What are the key government revenue streams, and how will the Budget for the Future Energy Fund be supported?"
+**Implementation:**
+- Created a custom `date_to_iso` tool using the `@tool` decorator to convert date strings to ISO format (YYYY-MM-DD)
+- Bound the tool to the LLM using `bind_tools()` method
+- Extracted date strings from the PDF document (e.g., "16 February 2024", "15 February 2008")
+- Used the LLM to invoke the tool and normalize dates automatically
+- Implemented reasoning logic to evaluate normalized dates against a reference date (2024-01-01)
+- Categorized dates into states: "Expired" (before reference) or "Upcoming" (after reference)
+- Demonstrated the LLM's ability to chain tool calls with reasoning to produce structured outputs
 
-**Architecture:**
+**Key Features:**
+- Tool definition with Pydantic schema for input validation
+- Automatic tool invocation by the LLM based on context
+- Multi-step reasoning: tool calling → normalization → evaluation → categorization
+- Structured JSON output with original text, normalized date, and status
 
+## Part 3: Multi-Agent Supervisor System
+
+**Objective:** Implement a multi-agent system using LangGraph with a supervisor pattern
+### Architecture:
 1. **Supervisor Agent**
    - Coordinates the specialized agents
    - Analyzes user queries to determine which agents to invoke
@@ -67,7 +81,7 @@ For this task based on the document [text](fy2024_analysis_of_revenue_and_expend
    - Uses dedicated LLM instance with system prompt for expenditure analysis
    - Extracts specific fund details and budget figures
 
-**LangGraph Workflow:**
+### LangGraph Workflow:
 ```
 Supervisor → (decides to call agents) → Tools Node → Supervisor → Final Answer
 ```
@@ -89,5 +103,3 @@ The notebook demonstrates the complete workflow by:
 1. Displaying all messages exchanged between supervisor and agents
 2. Showing tool calls made by the supervisor
 3. Presenting the final synthesized answer
-
-Run the notebook `multi_agent_notebook.ipynb` to see the multi-agent system in action.
