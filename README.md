@@ -27,6 +27,28 @@ Install all required dependencies:
 pip install -r requirements.txt
 ```
 
+## How to Run
+
+All code for this project is contained in the Jupyter notebook `python_notebook.ipynb`.
+
+**Steps to run:**
+
+1. Ensure you have configured your API key in the `.env` file (see API Key Configuration above)
+
+2. Open the notebook in VS Code:
+   - Open `python_notebook.ipynb` in VS Code
+   - Select a Python 3.13 kernel when prompted (click "Select Kernel" in the top-right corner)
+   - If no kernel appears, ensure you have Python 3.13 installed and the Jupyter extension enabled
+
+3. Execute the notebook cells sequentially:
+   - **Part 1 cells**: Document extraction and prompt engineering
+   - **Part 2 cells**: Tool calling and reasoning integration
+   - **Part 3 cells**: Multi-agent supervisor system
+
+4. Each part can be run independently by executing its respective cells
+
+**Note:** The notebook contains all implementations including document loaders, custom tools, agents, and the LangGraph workflow.
+
 ## Part 1: Document Extraction & Prompt Engineering with LangChain
 
 **Objective:** Load the PDF document into the LLM context window without RAG.
@@ -96,7 +118,7 @@ Supervisor → (decides to call agents) → Tools Node → Supervisor → Final 
 - Supervisor uses `bind_tools()` to make agents available as callable tools
 - Tool responses returned as `ToolMessage` objects with proper `tool_call_id` mapping
 - System prompts guide each agent's behavior and output format
-- No RAG system - full document passed to each agent's context
+- No RAG system - full document passed to each agent's context (Tried but embedding model for gemini is not available in free tier)
 
 **Execution:**
 The notebook demonstrates the complete workflow by:
