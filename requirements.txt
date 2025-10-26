@@ -1,12 +1,7 @@
 langchain-community
 PyMuPDF
-matplotlib
-Pillow
-jupyter
-pdfplumber
-langchain-text-splitters
 langchain-google-genai
-tiktoken
-pdfplumber
-chroma
+langgraph
+langchain-core
 python-dotenv
+jupyter
